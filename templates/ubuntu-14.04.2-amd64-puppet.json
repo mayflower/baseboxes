@@ -22,7 +22,7 @@
       "guest_os_type": "Ubuntu_64",
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "virtualbox_version_file": ".vbox_version",
-      "output_directory": "{{user `output_directory`}}/tmp/ubuntu-{{user `ubuntu_version`}}-{{user `ubuntu_arch`}}-puppet-virtualbox",
+      "output_directory": "{{user `output_directory`}}/.tmp/ubuntu-{{user `ubuntu_version`}}-{{user `ubuntu_arch`}}-puppet-virtualbox",
       "vboxmanage": [
         [ "modifyvm", "{{.Name}}", "--memory", "{{user `box_memory`}}" ],
         [ "modifyvm", "{{.Name}}", "--cpus", "{{user `box_cpus`}}" ]
@@ -72,7 +72,7 @@
 
       "guest_os_type": "ubuntu-64",
       "tools_upload_flavor": "linux",
-      "output_directory": "{{user `output_directory`}}/tmp/ubuntu-{{user `ubuntu_version`}}-{{user `ubuntu_arch`}}-puppet-vmware",
+      "output_directory": "{{user `output_directory`}}/.tmp/ubuntu-{{user `ubuntu_version`}}-{{user `ubuntu_arch`}}-puppet-vmware",
       "vmx_data": {
         "cpuid.coresPerSocket": "1",
         "memsize": "{{user `box_memory`}}",
