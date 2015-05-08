@@ -6,6 +6,3 @@ sed -ie 's,http://security.ubuntu.com/ubuntu,http://ubuntu.mirror.lrz.de/ubuntu/
 
 apt-get update
 apt-get -y upgrade
-
-# ensure the correct kernel headers are installed
-apt-get -y install linux-headers-$(uname -r)
