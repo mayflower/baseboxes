@@ -10,9 +10,9 @@
     "iso_checksum_type": "sha1",
     "http_directory": "http",
     "output_directory": "builds",
-    "box_disksize": 40960,
-    "box_cpus": 2,
-    "box_memory": 512
+    "vm_disksize": 40960,
+    "vm_cpus": 2,
+    "vm_memory": 512
   },
 
   "builders": [
@@ -22,10 +22,10 @@
       "guest_os_type": "Ubuntu_64",
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "virtualbox_version_file": ".vbox_version",
-      "output_directory": "{{user `output_directory`}}/.tmp/ubuntu-{{user `ubuntu_version`}}-{{user `ubuntu_arch`}}-puppet-virtualbox",
+      "output_directory": "{{user `output_directory`}}/.tmp/trusty64-puppet3-virtualbox",
       "vboxmanage": [
-        [ "modifyvm", "{{.Name}}", "--memory", "{{user `box_memory`}}" ],
-        [ "modifyvm", "{{.Name}}", "--cpus", "{{user `box_cpus`}}" ]
+        [ "modifyvm", "{{.Name}}", "--memory", "{{user `vm_memory`}}" ],
+        [ "modifyvm", "{{.Name}}", "--cpus", "{{user `vm_cpus`}}" ]
       ],
 
       "boot_command": [
@@ -55,7 +55,7 @@
 
       "boot_wait": "10s",
       "headless": true,
-      "disk_size": "{{user `box_disksize`}}",
+      "disk_size": "{{user `vm_disksize`}}",
       "http_directory": "{{user `http_directory`}}",
       "iso_checksum": "{{user `iso_checksum`}}",
       "iso_checksum_type": "{{user `iso_checksum_type`}}",
@@ -65,18 +65,18 @@
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_wait_timeout": "10000s",
-      "vm_name": "packer-ubuntu-{{user `ubuntu_version`}}-{{user `ubuntu_arch`}}-puppet"
+      "vm_name": "packer-trusty64-puppet3-{{user `box_version`}}"
     },
     {
       "type": "vmware-iso",
 
       "guest_os_type": "ubuntu-64",
       "tools_upload_flavor": "linux",
-      "output_directory": "{{user `output_directory`}}/.tmp/ubuntu-{{user `ubuntu_version`}}-{{user `ubuntu_arch`}}-puppet-vmware",
+      "output_directory": "{{user `output_directory`}}/.tmp/trusty64-puppet3-vmware",
       "vmx_data": {
         "cpuid.coresPerSocket": "1",
-        "memsize": "{{user `box_memory`}}",
-        "numvcpus": "{{user `box_cpus`}}"
+        "memsize": "{{user `vm_memory`}}",
+        "numvcpus": "{{user `vm_cpus`}}"
       },
 
       "boot_command": [
@@ -106,7 +106,7 @@
 
       "boot_wait": "10s",
       "headless": true,
-      "disk_size": "{{user `box_disksize`}}",
+      "disk_size": "{{user `vm_disksize`}}",
       "http_directory": "{{user `http_directory`}}",
       "iso_checksum": "{{user `iso_checksum`}}",
       "iso_checksum_type": "{{user `iso_checksum_type`}}",
@@ -116,7 +116,7 @@
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_wait_timeout": "10000s",
-      "vm_name": "packer-ubuntu-{{user `ubuntu_version`}}-{{user `ubuntu_arch`}}-puppet"
+      "vm_name": "packer-trusty64-puppet3-{{user `box_version`}}"
     }
   ],
 
