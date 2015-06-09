@@ -118,10 +118,23 @@
       "ssh_password": "vagrant",
       "ssh_wait_timeout": "10000s",
       "vm_name": "packer-trusty64-puppet3-{{user `box_version`}}"
+    },
+    {
+      "type": "lxc",
+      "config_file": "lxc/ubuntu",
+      "template_name": "ubuntu",
+      "target_runlevel": "2"
     }
   ],
 
   "provisioners": [
+    {
+      "only": ["lxc"],
+      "scripts": [
+        "scripts/lxc/prepare-vagrant-user.sh"
+      ],
+      "type": "shell"
+    },
     {
       "environment_vars": [
         "PUPPET_VERSION={{user `puppet_version`}}{{user `puppet_package_append`}}"
