@@ -159,7 +159,8 @@
   "post-processors": [
     {
       "output": "{{user `output_directory`}}/trusty64-puppet3-{{user `box_version`}}-{{.Provider}}.box",
-      "type": "vagrant"
+      "type": "vagrant",
+      "only": ["virtualbox-iso","vmware-iso"]
     }
   ]
 }
