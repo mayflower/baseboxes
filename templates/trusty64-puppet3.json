@@ -11,9 +11,9 @@
     "iso_checksum_type": "sha1",
     "http_directory": "http",
     "output_directory": "builds",
-    "vm_disksize": 40960,
-    "vm_cpus": 2,
-    "vm_memory": 512
+    "vm_disksize": "40960",
+    "vm_cpus": "2",
+    "vm_memory": "512"
   },
 
   "builders": [
@@ -123,6 +123,7 @@
       "type": "lxc",
       "config_file": "lxc/ubuntu",
       "template_name": "ubuntu",
+      "template_parameters": ["--arch", "{{user `ubuntu_arch`}}", "--release", "trusty"],
       "target_runlevel": "2"
     }
   ],
@@ -149,18 +150,28 @@
         "scripts/common/vagrant.sh",
         "scripts/common/vmtools.sh",
         "scripts/common/puppet.sh",
-        "scripts/ubuntu/cleanup.sh",
+        "scripts/ubuntu/cleanup.sh"
+      ],
+      "type": "shell"
+    },
+    {
+      "only": ["virtualbox-iso", "vmware-iso"],
+      "environment_vars": [
+        "PUPPET_VERSION={{user `puppet_version`}}{{user `puppet_package_append`}}"
+      ],
+      "execute_command": "echo 'vagrant'|{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
         "scripts/common/minimize.sh"
       ],
       "type": "shell"
+      
     }
   ],
 
   "post-processors": [
     {
-      "output": "{{user `output_directory`}}/trusty64-puppet3-{{user `box_version`}}-{{.Provider}}.box",
-      "type": "vagrant",
-      "only": ["virtualbox-iso","vmware-iso"]
+      "output": "builds/trusty64-puppet3-0.7.1-{{.Provider}}.box",
+      "type": "vagrant"
     }
   ]
 }
