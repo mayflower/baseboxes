@@ -132,7 +132,8 @@
     {
       "only": ["lxc"],
       "scripts": [
-        "scripts/lxc/prepare-vagrant-user.sh"
+        "scripts/lxc/prepare-vagrant-user.sh",
+        "scripts/lxc/prepare-man-and-language.sh"
       ],
       "type": "shell"
     },
