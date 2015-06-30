@@ -11,9 +11,9 @@
     "iso_checksum_type": "sha1",
     "http_directory": "http",
     "output_directory": "builds",
-    "vm_disksize": 40960,
-    "vm_cpus": 2,
-    "vm_memory": 512
+    "vm_disksize": "40960",
+    "vm_cpus": "2",
+    "vm_memory": "512"
   },
 
   "builders": [
