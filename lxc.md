@@ -2,11 +2,12 @@
 
 ## Prerequired
 
-1. Install go and config your go environment.
+1. Install go in version >= 1.4 and config your go environment.
   * Create a directory for the go development.
   * Set environment GOPATH to this directory.
-  * Install package for git and Bazaar.
+  * Install package for git, Bazaar and Mercurial.
 2. Prepare or select a writeable directory in your PATH to install the binaries
+3. Add the bin directory in your GOPATH to your PATH environment.
 3. Call the shell script lxc-packer-build.sh with the target path as first parameter.
 
 ## Packer lxc box
