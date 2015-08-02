@@ -2,3 +2,5 @@ builds/*
 !build/.gitkeep
 
 packer_cache/
+.vagrant
+vagrant/modules/
