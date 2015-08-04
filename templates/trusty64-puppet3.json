@@ -118,10 +118,25 @@
       "ssh_password": "vagrant",
       "ssh_wait_timeout": "10000s",
       "vm_name": "packer-trusty64-puppet3-{{user `box_version`}}"
+    },
+    {
+      "type": "lxc",
+      "config_file": "lxc/ubuntu",
+      "template_name": "ubuntu",
+      "template_parameters": ["--arch", "{{user `ubuntu_arch`}}", "--release", "trusty"],
+      "target_runlevel": "2"
     }
   ],
 
   "provisioners": [
+    {
+      "only": ["lxc"],
+      "scripts": [
+        "scripts/lxc/prepare-vagrant-user.sh",
+        "scripts/lxc/prepare-man-and-language.sh"
+      ],
+      "type": "shell"
+    },
     {
       "environment_vars": [
         "PUPPET_VERSION={{user `puppet_version`}}{{user `puppet_package_append`}}"
@@ -136,16 +151,27 @@
         "scripts/common/vagrant.sh",
         "scripts/common/vmtools.sh",
         "scripts/common/puppet.sh",
-        "scripts/ubuntu/cleanup.sh",
+        "scripts/ubuntu/cleanup.sh"
+      ],
+      "type": "shell"
+    },
+    {
+      "only": ["virtualbox-iso", "vmware-iso"],
+      "environment_vars": [
+        "PUPPET_VERSION={{user `puppet_version`}}{{user `puppet_package_append`}}"
+      ],
+      "execute_command": "echo 'vagrant'|{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
         "scripts/common/minimize.sh"
       ],
       "type": "shell"
+      
     }
   ],
 
   "post-processors": [
     {
-      "output": "{{user `output_directory`}}/trusty64-puppet3-{{user `box_version`}}-{{.Provider}}.box",
+      "output": "builds/trusty64-puppet3-0.7.1-{{.Provider}}.box",
       "type": "vagrant"
     }
   ]
