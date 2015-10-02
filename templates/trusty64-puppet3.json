@@ -3,7 +3,7 @@
     "box_version": "0.7.1",
     "puppet_version": "3.8.1",
     "puppet_package_append": "-1puppetlabs1",
-    "ubuntu_mirror": "http://releases.ubuntu.com",
+    "ubuntu_mirror": "http://old-releases.ubuntu.com/releases",
     "ubuntu_version": "14.04.2",
     "ubuntu_flavour": "server",
     "ubuntu_arch": "amd64",
