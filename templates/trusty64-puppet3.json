@@ -1,13 +1,13 @@
 {
   "variables": {
-    "box_version": "0.7.1",
+    "box_version": "0.7.2",
     "puppet_version": "3.8.1",
     "puppet_package_append": "-1puppetlabs1",
-    "ubuntu_mirror": "http://old-releases.ubuntu.com/releases",
-    "ubuntu_version": "14.04.2",
+    "ubuntu_mirror": "http://releases.ubuntu.com/",
+    "ubuntu_version": "14.04.3",
     "ubuntu_flavour": "server",
     "ubuntu_arch": "amd64",
-    "iso_checksum": "3bfa6eac84d527380d0cc52db9092cde127f161e",
+    "iso_checksum": "0501c446929f713eb162ae2088d8dc8b6426224a",
     "iso_checksum_type": "sha1",
     "http_directory": "http",
     "output_directory": "builds",
