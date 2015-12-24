@@ -149,7 +149,7 @@
         "scripts/ubuntu/networking.sh",
         "scripts/ubuntu/sudoers.sh",
         "scripts/common/vagrant.sh",
-        "scripts/common/vmtools.sh",
+        "scripts/ubuntu/vmtools.sh",
         "scripts/common/puppet.sh",
         "scripts/ubuntu/cleanup.sh"
       ],
@@ -165,7 +165,7 @@
         "scripts/common/minimize.sh"
       ],
       "type": "shell"
-      
+
     }
   ],
 
