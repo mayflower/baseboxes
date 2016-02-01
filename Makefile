@@ -2,6 +2,11 @@ default:
 
 all: trusty64-puppet3
 
+only-lxc:
+	@sudo echo -n ""
+	packer build -only lxc templates/trusty64-puppet3.json
+	packer build -only lxc templates/trusty64-puppet4.json
+
 trusty64-puppet3:
 	@sudo echo -n ""
 	packer build templates/trusty64-puppet3.json
