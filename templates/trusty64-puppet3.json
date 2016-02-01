@@ -1,7 +1,7 @@
 {
   "variables": {
     "box_version": "0.7.2",
-    "puppet_version": "3.8.1",
+    "puppet_version": "3.8.4",
     "puppet_package_append": "-1puppetlabs1",
     "ubuntu_mirror": "http://releases.ubuntu.com/",
     "ubuntu_version": "14.04.3",
@@ -144,8 +144,27 @@
       "execute_command": "echo 'vagrant'|{{.Vars}} sudo -S -E bash '{{.Path}}'",
       "scripts": [
         "scripts/ubuntu/update.sh",
-        "scripts/ubuntu/tools.sh",
-        "scripts/common/sshd.sh",
+        "scripts/ubuntu/tools.sh"
+      ],
+      "type": "shell"
+    },
+    {
+      "environment_vars": [
+        "PUPPET_VERSION={{user `puppet_version`}}{{user `puppet_package_append`}}"
+      ],
+      "execute_command": "echo 'vagrant'|{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
+        "scripts/common/sshd.sh"
+      ],
+      "type": "shell",
+      "pause_before": "15s"
+    },
+    {
+      "environment_vars": [
+        "PUPPET_VERSION={{user `puppet_version`}}{{user `puppet_package_append`}}"
+      ],
+      "execute_command": "echo 'vagrant'|{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
         "scripts/ubuntu/networking.sh",
         "scripts/ubuntu/sudoers.sh",
         "scripts/common/vagrant.sh",
@@ -165,7 +184,7 @@
         "scripts/common/minimize.sh"
       ],
       "type": "shell"
-      
+
     }
   ],
 
