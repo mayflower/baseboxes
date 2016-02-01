@@ -1,0 +1,197 @@
+{
+  "variables": {
+    "box_version": "0.1.0",
+    "ansible_version": "1.9.2",
+    "puppet_package_append": "-1trusty",
+    "ubuntu_mirror": "http://releases.ubuntu.com",
+    "ubuntu_version": "14.04.3",
+    "ubuntu_flavour": "server",
+    "ubuntu_arch": "amd64",
+    "iso_checksum": "0501c446929f713eb162ae2088d8dc8b6426224a",
+    "iso_checksum_type": "sha1",
+    "http_directory": "http",
+    "output_directory": "builds",
+    "vm_disksize": "40960",
+    "vm_cpus": "2",
+    "vm_memory": "512"
+  },
+
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+
+      "guest_os_type": "Ubuntu_64",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "virtualbox_version_file": ".vbox_version",
+      "output_directory": "{{user `output_directory`}}/.tmp/trusty64-puppet3-virtualbox",
+      "vboxmanage": [
+        [ "modifyvm", "{{.Name}}", "--memory", "{{user `vm_memory`}}" ],
+        [ "modifyvm", "{{.Name}}", "--cpus", "{{user `vm_cpus`}}" ]
+      ],
+
+      "boot_command": [
+        "<esc><wait>",
+        "<esc><wait>",
+        "<enter><wait>",
+        "/install/vmlinuz",
+        " auto",
+        " console-setup/ask_detect=false",
+        " console-setup/layoutcode=us",
+        " console-setup/modelcode=pc105",
+        " debconf/frontend=noninteractive",
+        " debian-installer=en_US",
+        " fb=false",
+        " initrd=/install/initrd.gz",
+        " kbd-chooser/method=us",
+        " keyboard-configuration/layout=USA",
+        " keyboard-configuration/variant=USA",
+        " locale=en_US",
+        " netcfg/get_domain=vm",
+        " netcfg/get_hostname=vagrant",
+        " noapic",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-14.04/preseed.cfg",
+        " -- ",
+        "<enter><wait>"
+      ],
+
+      "boot_wait": "10s",
+      "headless": true,
+      "disk_size": "{{user `vm_disksize`}}",
+      "http_directory": "{{user `http_directory`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_url": "{{user `ubuntu_mirror`}}/{{user `ubuntu_version`}}/ubuntu-{{user `ubuntu_version`}}-{{user `ubuntu_flavour`}}-{{user `ubuntu_arch`}}.iso",
+      "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
+      "ssh_port": 22,
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_wait_timeout": "10000s",
+      "vm_name": "packer-trusty64-puppet3-{{user `box_version`}}"
+    },
+    {
+      "type": "vmware-iso",
+
+      "guest_os_type": "ubuntu-64",
+      "tools_upload_flavor": "linux",
+      "output_directory": "{{user `output_directory`}}/.tmp/trusty64-puppet3-vmware",
+      "vmx_data": {
+        "cpuid.coresPerSocket": "1",
+        "memsize": "{{user `vm_memory`}}",
+        "numvcpus": "{{user `vm_cpus`}}"
+      },
+
+      "boot_command": [
+        "<esc><wait>",
+        "<esc><wait>",
+        "<enter><wait>",
+        "/install/vmlinuz",
+        " auto",
+        " console-setup/ask_detect=false",
+        " console-setup/layoutcode=us",
+        " console-setup/modelcode=pc105",
+        " debconf/frontend=noninteractive",
+        " debian-installer=en_US",
+        " fb=false",
+        " initrd=/install/initrd.gz",
+        " kbd-chooser/method=us",
+        " keyboard-configuration/layout=USA",
+        " keyboard-configuration/variant=USA",
+        " locale=en_US",
+        " netcfg/get_domain=vm",
+        " netcfg/get_hostname=vagrant",
+        " noapic",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-14.04/preseed.cfg",
+        " -- ",
+        "<enter><wait>"
+      ],
+
+      "boot_wait": "10s",
+      "headless": true,
+      "disk_size": "{{user `vm_disksize`}}",
+      "http_directory": "{{user `http_directory`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_url": "{{user `ubuntu_mirror`}}/{{user `ubuntu_version`}}/ubuntu-{{user `ubuntu_version`}}-{{user `ubuntu_flavour`}}-{{user `ubuntu_arch`}}.iso",
+      "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
+      "ssh_port": 22,
+      "ssh_username": "vagrant",
+      "ssh_password": "vagrant",
+      "ssh_wait_timeout": "10000s",
+      "vm_name": "packer-trusty64-puppet3-{{user `box_version`}}"
+    },
+    {
+      "type": "lxc",
+      "config_file": "lxc/ubuntu",
+      "template_name": "ubuntu",
+      "template_parameters": ["--arch", "{{user `ubuntu_arch`}}", "--release", "trusty"],
+      "target_runlevel": "2"
+    }
+  ],
+
+  "provisioners": [
+    {
+      "only": ["lxc"],
+      "scripts": [
+        "scripts/lxc/prepare-vagrant-user.sh",
+        "scripts/lxc/prepare-man-and-language.sh"
+      ],
+      "type": "shell"
+    },
+    {
+      "environment_vars": [
+        "PUPPET_VERSION={{user `puppet_version`}}{{user `puppet_package_append`}}"
+      ],
+      "execute_command": "echo 'vagrant'|{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
+        "scripts/ubuntu/update.sh",
+        "scripts/ubuntu/tools.sh"
+      ],
+      "type": "shell"
+    },
+    {
+      "environment_vars": [
+        "PUPPET_VERSION={{user `puppet_version`}}{{user `puppet_package_append`}}"
+      ],
+      "execute_command": "echo 'vagrant'|{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
+        "scripts/common/sshd.sh"
+      ],
+      "type": "shell",
+      "pause_before": "15s"
+    },
+    {
+      "environment_vars": [
+        "PUPPET_VERSION={{user `puppet_version`}}{{user `puppet_package_append`}}"
+      ],
+      "execute_command": "echo 'vagrant'|{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
+        "scripts/ubuntu/networking.sh",
+        "scripts/ubuntu/sudoers.sh",
+        "scripts/common/vagrant.sh",
+        "scripts/common/vmtools.sh",
+        "scripts/common/ansible2.sh",
+        "scripts/ubuntu/cleanup.sh"
+      ],
+      "type": "shell"
+    },
+    {
+      "only": ["virtualbox-iso", "vmware-iso"],
+      "environment_vars": [
+        "PUPPET_VERSION={{user `puppet_version`}}{{user `puppet_package_append`}}"
+      ],
+      "execute_command": "echo 'vagrant'|{{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
+        "scripts/common/minimize.sh"
+      ],
+      "type": "shell"
+
+    }
+  ],
+
+  "post-processors": [
+    {
+      "output": "builds/trusty64-puppet4-0.7.1-{{.Provider}}.box",
+      "type": "vagrant"
+    }
+  ]
+}
