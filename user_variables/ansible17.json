@@ -1,0 +1,8 @@
+{
+  "type_name": "ansible17",
+  "box_version": "0.1.0",
+  "provisioner_version": "1.7.1",
+  "provisioner_package_append": "-trusty-unstable-ppa",
+  "provisioner_ppa": "ppa:rquillo/ansible",
+  "install_script": "scripts/common/ansible.sh"
+}

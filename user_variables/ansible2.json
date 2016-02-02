@@ -1,0 +1,8 @@
+{
+  "type_name": "ansible2",
+  "box_version": "0.1.0",
+  "provisioner_version": "2.0.0.2",
+  "provisioner_package_append": "-1ppa~trusty",
+  "provisioner_ppa": "ppa:ansible/ansible",
+  "install_script": "scripts/common/ansible.sh"
+}

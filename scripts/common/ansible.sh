@@ -1,12 +1,12 @@
 #!/bin/bash
 
-if [ x$ANSIBLE_VERSION != x'provisionerless' ]; then
-  if [ x$ANSIBLE_VERSION == x'latest' ]; then
+if [ x$PROVISIONER_VERSION != x'provisionerless' ]; then
+  if [ x$PROVISIONER_VERSION == x'latest' ]; then
     # since we later concatenate the $ANSIBLEVERSION variable to the package names
     # an empty string means no specified version -> let apt-get decice -> latest
     ANSIBLEVERSION=""
   else
-    ANSIBLEVERSION="=$ANSIBLE_VERSION"
+    ANSIBLEVERSION="=$PROVISIONER_VERSION"
   fi
 else
   echo "Building a box without Ansible"
@@ -14,8 +14,8 @@ else
 fi
 
 echo "Configuring Ansible repository"
-add-apt-repository -y ppa:ansible/ansible-1.9
+add-apt-repository -y ${PROVISIONER_PPA}
 echo "Updating package lists"
 apt-get update
-echo "Installing Ansible (version: ${ANSIBLE_VERSION})"
+echo "Installing Ansible (version: ${PROVISIONER_VERSION})"
 apt-get install -y ansible${ANSIBLEVERSION}

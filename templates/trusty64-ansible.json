@@ -1,8 +1,11 @@
 {
   "variables": {
+    "type_name": "ansible2",
     "box_version": "0.1.0",
-    "ansible_version": "1.9.2",
-    "puppet_package_append": "-1trusty",
+    "provisioner_version": "2.0.0.2",
+    "provisioner_package_append": "-1ppa~trusty",
+    "provisioner_ppa": "ppa:ansible/ansible",
+    "install_script": "scripts/common/ansible.sh",
     "ubuntu_mirror": "http://releases.ubuntu.com",
     "ubuntu_version": "14.04.3",
     "ubuntu_flavour": "server",
@@ -23,7 +26,7 @@
       "guest_os_type": "Ubuntu_64",
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "virtualbox_version_file": ".vbox_version",
-      "output_directory": "{{user `output_directory`}}/.tmp/trusty64-puppet3-virtualbox",
+      "output_directory": "{{user `output_directory`}}/.tmp/trusty64-{{user `type_name`}}-virtualbox",
       "vboxmanage": [
         [ "modifyvm", "{{.Name}}", "--memory", "{{user `vm_memory`}}" ],
         [ "modifyvm", "{{.Name}}", "--cpus", "{{user `vm_cpus`}}" ]
@@ -66,14 +69,14 @@
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_wait_timeout": "10000s",
-      "vm_name": "packer-trusty64-puppet3-{{user `box_version`}}"
+      "vm_name": "packer-trusty64-{{user `type_name`}}-{{user `box_version`}}"
     },
     {
       "type": "vmware-iso",
 
       "guest_os_type": "ubuntu-64",
       "tools_upload_flavor": "linux",
-      "output_directory": "{{user `output_directory`}}/.tmp/trusty64-puppet3-vmware",
+      "output_directory": "{{user `output_directory`}}/.tmp/trusty64-{{user `type_name`}}-vmware",
       "vmx_data": {
         "cpuid.coresPerSocket": "1",
         "memsize": "{{user `vm_memory`}}",
@@ -117,7 +120,7 @@
       "ssh_username": "vagrant",
       "ssh_password": "vagrant",
       "ssh_wait_timeout": "10000s",
-      "vm_name": "packer-trusty64-puppet3-{{user `box_version`}}"
+      "vm_name": "packer-trusty64-{{user `type_name`}}-{{user `box_version`}}"
     },
     {
       "type": "lxc",
@@ -138,9 +141,6 @@
       "type": "shell"
     },
     {
-      "environment_vars": [
-        "PUPPET_VERSION={{user `puppet_version`}}{{user `puppet_package_append`}}"
-      ],
       "execute_command": "echo 'vagrant'|{{.Vars}} sudo -S -E bash '{{.Path}}'",
       "scripts": [
         "scripts/ubuntu/update.sh",
@@ -150,35 +150,24 @@
     },
     {
       "environment_vars": [
-        "PUPPET_VERSION={{user `puppet_version`}}{{user `puppet_package_append`}}"
+        "PROVISIONER_VERSION={{user `provisioner_version`}}{{user `provisioner_package_append`}}",
+        "PROVISIONER_PPA={{user `provisioner_ppa`}}"
       ],
       "execute_command": "echo 'vagrant'|{{.Vars}} sudo -S -E bash '{{.Path}}'",
       "scripts": [
-        "scripts/common/sshd.sh"
+        "scripts/common/sshd.sh",
+        "scripts/ubuntu/networking.sh",
+        "scripts/ubuntu/sudoers.sh",
+        "scripts/common/vagrant.sh",
+        "scripts/common/vmtools.sh",
+        "{{user `install_script`}}",
+        "scripts/ubuntu/cleanup.sh"
       ],
       "type": "shell",
       "pause_before": "15s"
     },
     {
-      "environment_vars": [
-        "PUPPET_VERSION={{user `puppet_version`}}{{user `puppet_package_append`}}"
-      ],
-      "execute_command": "echo 'vagrant'|{{.Vars}} sudo -S -E bash '{{.Path}}'",
-      "scripts": [
-        "scripts/ubuntu/networking.sh",
-        "scripts/ubuntu/sudoers.sh",
-        "scripts/common/vagrant.sh",
-        "scripts/common/vmtools.sh",
-        "scripts/common/ansible2.sh",
-        "scripts/ubuntu/cleanup.sh"
-      ],
-      "type": "shell"
-    },
-    {
       "only": ["virtualbox-iso", "vmware-iso"],
-      "environment_vars": [
-        "PUPPET_VERSION={{user `puppet_version`}}{{user `puppet_package_append`}}"
-      ],
       "execute_command": "echo 'vagrant'|{{.Vars}} sudo -S -E bash '{{.Path}}'",
       "scripts": [
         "scripts/common/minimize.sh"
@@ -190,7 +179,7 @@
 
   "post-processors": [
     {
-      "output": "builds/trusty64-puppet4-0.7.1-{{.Provider}}.box",
+      "output": "builds/trusty64-{{user `type_name`}}-{{user `box_version`}}-{{.Provider}}.box",
       "type": "vagrant"
     }
   ]
