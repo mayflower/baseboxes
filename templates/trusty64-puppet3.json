@@ -1,6 +1,6 @@
 {
   "variables": {
-    "box_version": "0.7.2",
+    "box_version": "0.7.3",
     "puppet_version": "3.8.4",
     "puppet_package_append": "-1puppetlabs1",
     "ubuntu_mirror": "http://releases.ubuntu.com/",
@@ -190,7 +190,7 @@
 
   "post-processors": [
     {
-      "output": "builds/trusty64-puppet3-0.7.2-{{.Provider}}.box",
+      "output": "builds/trusty64-puppet3-{{user `box_version`}}-{{.Provider}}.box",
       "type": "vagrant"
     }
   ]
